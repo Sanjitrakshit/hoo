@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FREDMED | AI Symptom Checker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00aaff;
+      --secondary: #7ec8e3;
+      --text: #1a1a1a;
+      --muted: #5a5a5a;
+      --bg-light: #e0f7ff;
+      --bg-dark: #0f172a;
+      --white: #ffffff;
+      --gray: #e2e8f0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background-color: var(--white);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--white);
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      color: #eef3f9;
+    }
+
+    .cta-button-container {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .cta-button {
+      padding: 0.9rem 2rem;
+      font-size: 1rem;
+      background-color: var(--white);
+      color: var(--primary);
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    }
+
+    .cta-button:hover {
+      background-color: #e6f0ff;
+      transform: translateY(-2px);
+    }
+
+    section {
+      padding: 4rem 2rem;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 2.5rem;
+      color: var(--primary);
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature {
+      background: var(--bg-light);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.04);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .feature img {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+    }
+
+    .feature h3 {
+      margin-bottom: 0.7rem;
+      font-size: 1.2rem;
+    }
+
+    .feature p {
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .checker {
+      text-align: center;
+      background-color: #f0f8ff;
+      padding: 3rem 2rem;
+      border-radius: 24px;
+      margin-top: 4rem;
+    }
+
+    .checker input, .checker textarea {
+      padding: 0.9rem;
+      width: 60%;
+      max-width: 400px;
+      border: 1px solid var(--gray);
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+
+    .checker button {
+      padding: 0.9rem 1.5rem;
+      margin-top: 1rem;
+      background-color: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s ease;
+    }
+
+    .checker button:hover {
+      background-color: #0078b7;
+    }
+
+    #results, #feedbackResponse {
+      margin-top: 2rem;
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: #888;
+      background-color: #f9fafb;
+      border-top: 1px solid #eee;
+      margin-top: 3rem;
+    }
+
+    @keyframes slideIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+      .image-wrapper {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+       .image-container {
+      transition: transform 0.6s ease, box-shadow 0.6s ease;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .image-container:hover {
+      transform: scale(1.2) rotate(2deg);
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+    }
+
+    .image-container img {
+      width: 300px;
+      height: auto;
+      border-radius: 16px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Welcome to FREDMED</h1>
+    <p>Your AI-powered health assistant. Check symptoms, discover remedies, and stay informed—quickly and securely.</p>
+     <div class="image-wrapper">
+     <div class="image-container">
+     <img  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPn1Ls2_QQsCO7hAkckuTYRIq8pS48OIp5TQ&s" class="full-width">
+    </div>
+    </div>
+    <div class="cta-button-container">
+      <button class="cta-button" onclick="scrollToChecker()">Try Symptom Checker</button>
+      <button class="cta-button" onclick="scrollToHealthTips()">Health Tips</button>
+      <button class="cta-button" onclick="scrollToEmergency()">Emergency Contacts</button>
+      <button class="cta-button" onclick="scrollToHelp()">Help & Support</button>
+      <button class="cta-button" onclick="scrollToFeedback()">Feedback</button>
+</div>
+    
+  </header>
+
+  <section>
+    <h2>What We Offer</h2>
+    <div class="features">
+      <div class="feature">
+        <img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/231/732/datas/original.png" alt="AI Symptom">
+        <h3>🧠 AI Symptom Analysis</h3>
+        <p>Advanced algorithms that analyze your symptoms and suggest possible conditions.</p>
+      </div>
+      <div class="feature">
+        <img src="https://play-lh.googleusercontent.com/1WlFCqZn-eJ91lMMh-ZHhzqtm24xkEB-PDIy6asDmpSLVx3kynypWSqpXDJyzI6nftE" alt="Home Remedies">
+        <h3>🌿 Home Remedies</h3>
+        <p>Trusted, science-backed home treatments for everyday ailments.</p>
+      </div>
+      <div class="feature">
+        <img src="https://img.freepik.com/free-vector/traumatologist-trauma-surgery-doctor-injured-limb-broken-bone-sprain-bondage-cast-application-emergency-help-vector-illustration_613284-1482.jpg" alt="Emergency Help">
+        <h3>🚨 Emergency Help</h3>
+        <p>Quick access to emergency services and nearest hospitals.</p>
+      </div>
+      <div class="feature">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM8OqlobzViJ_XOZNhZOLavlR591XIh5Y1GQ&s" alt="Privacy First">
+        <h3>🔐 Privacy First</h3>
+        <p>All your data stays confidential and protected—always.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="dailyHealthTips">
+    <h2>Daily Health Tips & Home Remedies</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>💧 Stay Hydrated</h3>
+        <p>Drink at least 8 glasses of water daily.</p>
+      </div>
+      <div class="feature">
+        <h3>🛏 Sleep Well</h3>
+        <p>Aim for 7–8 hours of quality sleep every night.</p>
+      </div>
+      <div class="feature">
+        <h3>🏃‍♂️ Exercise</h3>
+        <p>Do at least 30 minutes of physical activity a day.</p>
+      </div>
+      <div class="feature">
+        <h3>🤧 Cold & Flu</h3>
+        <p>Drink warm turmeric milk before bedtime.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="symptomChecker" class="checker">
+    <h2>Symptom Checker</h2>
+    <input type="text" id="symptomInput" placeholder="e.g. fever, fatigue, sore throat" />
+    <button onclick="checkSymptoms()">Analyze</button>
+    <div id="results"></div>
+  </section>
+
+  <section id="emergency">
+    <h2>Emergency Contacts</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>📞 Dial 911 for Immediate Assistance</h3>
+        <p>If you're in a life-threatening emergency, dial 911 for urgent help.</p>
+      </div>
+      <div class="feature">
+        <h3>🚑 Ambulance</h3>
+        <p>For medical emergencies, contact your local ambulance service.</p>
+      </div>
+      <div class="feature">
+        <h3>🚒 Fire Brigade</h3>
+        <p>For fire-related emergencies, dial: 101</p>
+      </div>
+      <div class="feature">
+        <h3>🚔 Police</h3>
+        <p>If you need police assistance, call: 100</p>
+      </div>
+      <div class="feature">
+        <h3>☠ Poison Control</h3>
+        <p>If you've been poisoned or suspect poisoning, call: 1-800-222-1222</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="helpSupport">
+    <h2>Help & Support</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>✔ 24/7 Customer Support</h3>
+        <p>Our support team is always ready to assist you.</p>
+      </div>
+      <div class="feature">
+        <h3>✔ Live Chat with Health Experts</h3>
+        <p>Talk directly to medical professionals for guidance.</p>
+      </div>
+      <div class="feature">
+        <h3>✔ FAQs and Medical Resources</h3>
+        <p>Find answers to common health questions and helpful resources.</p>
+      </div>
+      <div class="feature">
+        <h3>✔ Email Support</h3>
+        <p>Need help? Reach out to us at: <strong>support@fredmed.com</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="feedbackForm" class="checker">
+    <h2>We Value Your Feedback</h2>
+    <form id="feedback" onsubmit="submitFeedback(event)">
+      <input type="text" id="name" placeholder="Your Name" required /><br/>
+      <input type="email" id="email" placeholder="Your Email" required /><br/>
+      <textarea id="message" placeholder="Your feedback..." rows="5" required></textarea><br/><br/>
+      <button type="submit">Submit</button>
+      <div id="feedbackResponse"></div>
+    </form>
+
+  </section>
+<section id="faq">
+  <h2>Frequently Asked Questions</h2>
+  <div class="features">
+    <div class="feature">
+      <h3>How accurate is the symptom checker?</h3>
+      <p>Our AI provides highly accurate predictions based on medical databases.</p>
+    </div>
+    <div class="feature">
+      <h3>Is my data safe?</h3>
+      <p>Yes, we prioritize user confidentiality and data security.</p>
+    </div>
+    <div class="feature">
+      <h3>Can I contact a real doctor?</h3>
+      <p>Yes, we provide connections to certified doctors.</p>
+    </div>
+  </div>
+</section>
+</section>
+
+ 
+
+  <section id="feedbackForm" class="checker">
+  <footer>
+    <p>&copy; 2025 FREDMED | Built with love and care.</p>
+  </footer>
+
+  <script>
+    function scrollToHealthTips() {
+      document.getElementById("dailyHealthTips").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function scrollToEmergency() {
+      document.getElementById("emergency").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function scrollToHelp() {
+      document.getElementById("helpSupport").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function scrollToChecker() {
+      document.getElementById("symptomChecker").scrollIntoView({ behavior: "smooth" });
+    }
+    function scrollToFeedback() {
+    document.getElementById("feedbackForm").scrollIntoView({ behavior: "smooth" });
+  }
+
+    function checkSymptoms() {
+      const input = document.getElementById('symptomInput').value;
+      const results = document.getElementById('results');
+      if (input) {
+        results.innerHTML = `<p>Based on your symptoms, we suggest you consider consulting a doctor. Symptoms: ${input}</p>`;
+      } else {
+        results.innerHTML = `<p>Please enter your symptoms.</p>`;
+      }
+    }
+
+    function submitFeedback(event) {
+      event.preventDefault();
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const message = document.getElementById("message").value;
+      const response = document.getElementById("feedbackResponse");
+
+      if (name && email && message) {
+        response.innerHTML = `<p>Thank you, ${name}, for your feedback!</p>`;
+        document.getElementById("feedback").reset();
+      } else {
+        response.innerHTML = `<p>Please fill out all fields.</p>`;
+      }
+    }
+  </script>
+
+</body>
+</html>
